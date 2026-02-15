@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ song.title }} - {{ song.band.name }} - Setlistify{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'song_list' %}">Songs</a></li>
+            <li class="breadcrumb-item active">{{ song.title }}</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">{{ song.title }}</h3>
+                <div>
+                    <a href="{% url 'song_update' song.pk %}" class="btn btn-light btn-sm">
+                        <i class="fas fa-edit me-1"></i>Edit
+                    </a>
+                    <a href="{% url 'song_delete' song.pk %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash me-1"></i>Delete
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-sm-4 fw-bold">Band:</div>
+                    <div class="col-sm-8">
+                        <a href="{% url 'band_detail' song.band.pk %}">
+                            {{ song.band.name }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-sm-4 fw-bold">Duration:</div>
+                    <div class="col-sm-8">
+                        {{ song.duration_formatted }} ({{ song.duration }} seconds)
+                    </div>
+                </div>
+
+                {% if song.lyrics_preview %}
+                <div class="row mb-4">
+                    <div class="col-sm-4 fw-bold">Lyrics Preview:</div>
+                    <div class="col-sm-8">
+                        <div class="p-3 bg-light rounded">
+                            {{ song.lyrics_preview|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-sm-4 fw-bold">Played at:</div>
+                    <div class="col-sm-8">
+                        {% if concerts %}
+                            <ul class="list-group">
+                                {% for entry in concerts %}
+                                    <li class="list-group-item">
+                                        <a href="{% url 'concert_detail' entry.concert.pk %}">
+                                            {{ entry.concert.band.name }} at {{ entry.concert.venue }}
+                                        </a>
+                                        <small class="text-muted d-block">
+                                            {{ entry.concert.date|date:"F d, Y" }} - {{ entry.concert.city }}
+                                            {% if entry.encore %}
+                                                <span class="badge bg-warning ms-2">Encore</span>
+                                            {% endif %}
+                                            {% if entry.notes %}
+                                                <br><em>{{ entry.notes }}</em>
+                                            {% endif %}
+                                        </small>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">This song hasn't been played at any concerts yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

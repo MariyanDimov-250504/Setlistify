@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ band.name }} - Setlistify{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'band_list' %}">Bands</a></li>
+            <li class="breadcrumb-item active">{{ band.name }}</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        {% if band.image_url %}
+            <img src="{{ band.image_url }}" class="img-fluid detail-image" alt="{{ band.name }}">
+        {% else %}
+            <div class="detail-image bg-secondary d-flex align-items-center justify-content-center text-white">
+                <i class="fas fa-drum fa-5x"></i>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-start">
+            <h1>{{ band.name }}</h1>
+            <div>
+                <a href="{% url 'band_update' band.pk %}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-edit me-1"></i>Edit
+                </a>
+                <a href="{% url 'band_delete' band.pk %}" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-trash me-1"></i>Delete
+                </a>
+            </div>
+        </div>
+
+        <p class="text-muted mb-2">
+            <span class="badge bg-primary">{{ band.genre }}</span>
+            <span class="ms-2"><i class="far fa-calendar-alt me-1"></i>Formed: {{ band.formed_year }}</span>
+        </p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Biography</h5>
+                <p class="card-text">{{ band.bio|linebreaks }}</p>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <ul class="nav nav-tabs" id="bandTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="songs-tab" data-bs-toggle="tab" data-bs-target="#songs" type="button" role="tab">
+                        <i class="fas fa-headphones me-1"></i>Songs ({{ songs.count }})
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="concerts-tab" data-bs-toggle="tab" data-bs-target="#concerts" type="button" role="tab">
+                        <i class="fas fa-calendar-alt me-1"></i>Concerts ({{ concerts.count }})
+                    </button>
+                </li>
+            </ul>
+            <a href="{% url 'song_create' %}?band={{ band.pk }}" class="btn btn-success btn-sm">
+                <i class="fas fa-plus me-1"></i>Add Song for {{ band.name }}
+            </a>
+        </div>
+
+        <div class="tab-content p-3 border border-top-0 rounded-bottom" id="bandTabsContent">
+            <div class="tab-pane fade show active" id="songs" role="tabpanel">
+                {% if songs %}
+                    <div class="list-group">
+                        {% for song in songs %}
+                            <a href="{% url 'song_detail' song.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ song.title }}</strong>
+                                    <small class="text-muted d-block">{{ song.band.name }}</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">{{ song.duration_formatted|default:song.duration|add:" min" }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center py-3">No songs added yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="tab-pane fade" id="concerts" role="tabpanel">
+                {% if concerts %}
+                    <div class="list-group">
+                        {% for concert in concerts %}
+                            <a href="{% url 'concert_detail' concert.pk %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ concert.venue }}</h6>
+                                    <small class="text-primary">{{ concert.date|date:"M d, Y" }}</small>
+                                </div>
+                                <p class="mb-1">{{ concert.city }}</p>
+                                {% if concert.tour_name %}
+                                    <small class="text-muted">Tour: {{ concert.tour_name }}</small>
+                                {% endif %}
+                                <br>
+                                <small class="text-success">
+                                    <i class="fas fa-list me-1"></i>{{ concert.setlist.count }} song{{ concert.setlist.count|pluralize }} in setlist
+                                </small>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center py-3">No concerts added yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

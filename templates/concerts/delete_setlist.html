@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Remove Song from Setlist - Setlistify{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Remove Song</h4>
+            </div>
+            <div class="card-body">
+                <p class="lead">Are you sure you want to remove this song from the setlist?</p>
+
+                <div class="alert alert-warning">
+                    <strong>{{ entry.song.title }}</strong> (Order: {{ entry.order }})
+                    {% if entry.encore %}
+                        <span class="badge bg-warning ms-2">Encore</span>
+                    {% endif %}
+                </div>
+
+                <p class="text-muted">This action cannot be undone.</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'concert_detail' concert.pk %}" class="btn btn-outline-secondary me-md-2">
+                            <i class="fas fa-times me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Yes, Remove Song
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

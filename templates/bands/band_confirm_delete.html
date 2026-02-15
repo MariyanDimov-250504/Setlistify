@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete {{ band.name }} - Setlistify{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Confirm Delete</h4>
+            </div>
+            <div class="card-body">
+                <p class="lead">Are you sure you want to delete <strong>"{{ band.name }}"</strong>?</p>
+
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle me-2"></i>
+                    This will also delete all songs and concerts associated with this band!
+                </div>
+
+                <p class="text-muted">This action cannot be undone.</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'band_detail' band.pk %}" class="btn btn-outline-secondary me-md-2">
+                            <i class="fas fa-times me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Yes, Delete Band
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

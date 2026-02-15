@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bands - Setlistify{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-drum me-2"></i>Bands</h1>
+    <a href="{% url 'band_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i>Add New Band
+    </a>
+</div>
+
+{% if bands %}
+    <div class="row">
+        {% for band in bands %}
+            <div class="col-md-4 mb-4">
+                <div class="card band-card h-100">
+                    {% if band.image_url %}
+                        <img src="{{ band.image_url }}" class="card-img-top" alt="{{ band.name }}">
+                    {% else %}
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white">
+                            <i class="fas fa-drum fa-4x"></i>
+                        </div>
+                    {% endif %}
+                    <span class="band-genre">{{ band.genre }}</span>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ band.name }}</h5>
+                        <p class="band-year">
+                            <i class="far fa-calendar-alt me-1"></i>Formed: {{ band.formed_year }}
+                        </p>
+                        <p class="card-text">{{ band.bio|truncatewords:20 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'band_detail' band.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-info-circle me-1"></i>Details
+                            </a>
+                            <small class="text-muted">
+                                {{ band.songs.count }} song{{ band.songs.count|pluralize }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info text-center py-5">
+        <i class="fas fa-drum fa-4x mb-3"></i>
+        <h4>No Bands Yet</h4>
+        <p>Get started by adding your first band!</p>
+        <a href="{% url 'band_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Add Your First Band
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

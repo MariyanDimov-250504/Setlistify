@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ concert.band.name }} at {{ concert.venue }} - Setlistify{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'concert_list' %}">Concerts</a></li>
+            <li class="breadcrumb-item active">{{ concert.band.name }} at {{ concert.venue }}</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">
+                    {{ concert.band.name }} - {{ concert.date|date:"F d, Y" }}
+                </h3>
+                <div>
+                    <a href="{% url 'concert_update' concert.pk %}" class="btn btn-light btn-sm">
+                        <i class="fas fa-edit me-1"></i>Edit
+                    </a>
+                    <a href="{% url 'concert_delete' concert.pk %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash me-1"></i>Delete
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Band:</div>
+                    <div class="col-sm-9">
+                        <a href="{% url 'band_detail' concert.band.pk %}">{{ concert.band.name }}</a>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Venue:</div>
+                    <div class="col-sm-9">{{ concert.venue }}, {{ concert.city }}</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Date:</div>
+                    <div class="col-sm-9">{{ concert.date|date:"l, F j, Y" }}</div>
+                </div>
+
+                {% if concert.tour_name %}
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Tour:</div>
+                    <div class="col-sm-9">{{ concert.tour_name }}</div>
+                </div>
+                {% endif %}
+
+                {% if concert.notes %}
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Notes:</div>
+                    <div class="col-sm-9">{{ concert.notes|linebreaks }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+<div class="card">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0"><i class="fas fa-list me-2"></i>Setlist</h4>
+        <a href="{% url 'add_setlist_entry' concert.pk %}" class="btn btn-light btn-sm">
+            <i class="fas fa-plus me-1"></i>Add Song
+        </a>
+    </div>
+    <div class="card-body">
+        {% if setlist %}
+            <div class="list-group">
+                {% for entry in setlist %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-secondary me-3">{{ entry.order }}</span>
+                            <div>
+                                <!-- Make song title clickable -->
+                                <a href="{% url 'song_detail' entry.song.pk %}" class="text-decoration-none fw-bold">
+                                    {{ entry.song.title }}
+                                </a>
+                                {% if entry.encore %}
+                                    <span class="badge bg-warning ms-2">Encore</span>
+                                {% endif %}
+                                {% if entry.notes %}
+                                    <br><small class="text-muted">{{ entry.notes }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div>
+                            <a href="{% url 'edit_setlist_entry' concert.pk entry.pk %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'delete_setlist_entry' concert.pk entry.pk %}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-muted py-3">
+                No songs in setlist yet.
+                <a href="{% url 'add_setlist_entry' concert.pk %}">Add the first song!</a>
+            </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

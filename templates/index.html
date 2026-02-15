@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Setlistify{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-5">
+    <div class="col-md-6">
+        <h1 class="display-4 fw-bold">Welcome to Setlistify</h1>
+        <p class="lead">Your ultimate concert setlist archive. Discover what your favorite bands played live, explore setlists, and relive the concert experience.</p>
+        <hr class="my-4">
+        <p>Browse bands, explore songs, and dive into concert history.</p>
+        <a class="btn btn-primary btn-lg me-2" href="{% url 'band_list' %}" role="button">
+            <i class="fas fa-music me-2"></i>Explore Bands
+        </a>
+        <a class="btn btn-outline-secondary btn-lg" href="{% url 'concert_list' %}" role="button">
+            <i class="fas fa-calendar-alt me-2"></i>View Concerts
+        </a>
+    </div>
+    <div class="col-md-6">
+        <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+             class="img-fluid rounded shadow" alt="Concert crowd">
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Features</h2>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4">
+            <i class="fas fa-drum fa-3x text-primary mb-3"></i>
+            <h4>Bands</h4>
+            <p>Explore detailed band profiles, discography, and concert history.</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4">
+            <i class="fas fa-headphones fa-3x text-primary mb-3"></i>
+            <h4>Songs</h4>
+            <p>Discover songs and see which concerts they've been played at.</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4">
+            <i class="fas fa-list fa-3x text-primary mb-3"></i>
+            <h4>Setlists</h4>
+            <p>View complete setlists with song order and encore information.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

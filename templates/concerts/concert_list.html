@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Concerts - Setlistify{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-calendar-alt me-2"></i>Concerts</h1>
+    <a href="{% url 'concert_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i>Add New Concert
+    </a>
+</div>
+
+{% if concerts %}
+    <div class="row">
+        {% for concert in concerts %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ concert.band.name }}</h5>
+                        <span class="badge bg-primary">{{ concert.date|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-3 text-muted">
+                            <i class="fas fa-map-marker-alt me-1"></i>{{ concert.venue }}, {{ concert.city }}
+                        </h6>
+
+                        {% if concert.tour_name %}
+                            <p class="mb-2"><strong>Tour:</strong> {{ concert.tour_name }}</p>
+                        {% endif %}
+
+                        {% if concert.notes %}
+                            <p class="mb-3">{{ concert.notes|truncatewords:20 }}</p>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-secondary">
+                                <i class="fas fa-list me-1"></i>{{ concert.setlist.count }} songs
+                            </span>
+                            <a href="{% url 'concert_detail' concert.pk %}" class="btn btn-sm btn-outline-primary">
+                                View Setlist <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info text-center py-5">
+        <i class="fas fa-calendar-alt fa-4x mb-3"></i>
+        <h4>No Concerts Yet</h4>
+        <p>Get started by adding your first concert!</p>
+        <a href="{% url 'concert_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Add Your First Concert
+        </a>
+    </div>
+{% endif %}
+{% endblock %}
