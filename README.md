@@ -11,7 +11,7 @@ Setlistify allows music fans to:
 - songs - Song management
 - concerts - Concert and setlist management
 
-### Setup Instructions
+### Setup Instructions (recommended to read README file in the Project for better view, copy, etc.)
 1. Open Terminal (cmd, PowerShell, git bash)
 2. From terminal clone repository in desired folder (use that folder for next setup steps)
 2. Via PyCharm open the cloned repository folder (close environment creation if asked)
@@ -42,4 +42,4 @@ DEBUG=True
 |DB_HOST        | Database host             | localhost
 |DB_PORT        | Database port             | 5432
 |SECRET_KEY     | Django secret key         | any-random-string
-|DEBUG          | Debug mode	            | True
+|DEBUG          | Debug mode	              | True
