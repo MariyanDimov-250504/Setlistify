@@ -37,6 +37,16 @@
                         </a>
                     </div>
                 </div>
+                <div class="row mb-4">
+                    <div class="col-sm-4 fw-bold">Release Year:</div>
+                    <div class="col-sm-8">
+                        {% if song.release_year %}
+                            <span class="badge bg-secondary fs-6">{{ song.release_year }}</span>
+                        {% else %}
+                            <span class="text-muted">Not specified</span>
+                        {% endif %}
+                    </div>
+                </div>
 
                 <div class="row mb-4">
                     <div class="col-sm-4 fw-bold">Duration:</div>

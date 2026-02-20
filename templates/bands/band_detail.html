@@ -72,12 +72,17 @@
                 {% if songs %}
                     <div class="list-group">
                         {% for song in songs %}
-                            <a href="{% url 'song_detail' song.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>{{ song.title }}</strong>
-                                    <small class="text-muted d-block">{{ song.band.name }}</small>
+                            <a href="{% url 'song_detail' song.pk %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ song.title }}</strong>
+                                        {% if song.release_year %}
+                                            <span class="badge bg-secondary ms-2">{{ song.release_year }}</span>
+                                        {% endif %}
+                                        <small class="text-muted d-block">{{ song.band.name }}</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">{{ song.duration_formatted }}</span>
                                 </div>
-                                <span class="badge bg-primary rounded-pill">{{ song.duration_formatted|default:song.duration|add:" min" }}</span>
                             </a>
                         {% endfor %}
                     </div>

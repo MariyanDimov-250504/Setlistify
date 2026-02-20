@@ -14,11 +14,17 @@ class SongForm(forms.ModelForm):
 
     class Meta:
         model = Song
-        fields = ['title', 'duration_display', 'band', 'lyrics_preview']
+        fields = ['title', 'duration_display', 'release_year', 'band', 'lyrics_preview']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'e.g., Enter Sandman'
+            }),
+            'release_year': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1900,
+                'max': 2026,
+                'placeholder': 'e.g., 1991'
             }),
             'band': forms.Select(attrs={
                 'class': 'form-control'
@@ -31,6 +37,7 @@ class SongForm(forms.ModelForm):
         }
         labels = {
             'title': 'Song Title',
+            'release_year': 'Release Year',
             'band': 'Band',
             'lyrics_preview': 'Lyrics Preview',
         }
@@ -73,6 +80,13 @@ class SongForm(forms.ModelForm):
         if len(title) < 2:
             raise forms.ValidationError('Song title must be at least 2 characters long.')
         return title
+
+    def clean_release_year(self):
+        year = self.cleaned_data.get('release_year')
+        if year:
+            if year < 1900 or year > 2100:
+                raise forms.ValidationError('Release year must be between 1900 and 2100')
+        return year
 
     def save(self, commit=True):
         self.instance.duration = self.cleaned_data['duration_display']

@@ -15,8 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.shortcuts import render
+from . import views
+
+def home_view(request):
+    return render(request, 'index.html')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home_view, name='home'),  # This should point to your home page
+    path('bands/', include('bands.urls')),
+    path('songs/', include('songs.urls')),
+    path('concerts/', include('concerts.urls')),
 ]
+
+handler404 = 'Setlistify.views.custom_404'

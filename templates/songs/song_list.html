@@ -18,6 +18,7 @@
                 <tr>
                     <th>Title</th>
                     <th>Band</th>
+                    <th>Release Year</th>
                     <th>Duration</th>
                     <th>Actions</th>
                 </tr>
@@ -30,6 +31,13 @@
                         <a href="{% url 'band_detail' song.band.pk %}" class="text-decoration-none">
                             {{ song.band.name }}
                         </a>
+                    </td>
+                    <td>
+                        {% if song.release_year %}
+                            {{ song.release_year }}
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
                     </td>
                     <td>{{ song.duration_formatted }}</td>  <!-- Using the model method -->
                     <td>
